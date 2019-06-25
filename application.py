@@ -7,17 +7,17 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
 import seaborn as sns
 import matplotlib.pyplot as plt
+import datetime
 
-titanic_data = "static/titanic3.xls"
-trained_titanic = pd.read_excel(titanic_data)
-trained_titanic.fillna(trained_titanic.mean(), inplace=True)
+minnow = "static/minnow.csv"
+trained_minnow = pd.read_csv(minnow)
+trained_minnow.fillna(trained_minnow.mean(), inplace=True)
 
 labelEncoder = LabelEncoder()
-labelEncoder.fit(trained_titanic['sex'])
-trained_titanic['sex'] = labelEncoder.transform(trained_titanic['sex'])
-trained_titanic['embarked'] = labelEncoder.fit_transform(trained_titanic['embarked'].astype(str))
+labelEncoder.fit(trained_minnow['Survived'])
+trained_minnow['Survived'] = labelEncoder.transform(trained_minnow['Survived'])
 
-# print(trained_titanic.info())
+# print(trained_minnow.info())
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
@@ -31,38 +31,29 @@ def kmeans():
     x_column = request.args['x_value']
     y_column = request.args['y_value']
     k_input = int(request.args['k_input'])
+    start_time = datetime.datetime.now()
     kmeans = KMeans(n_clusters=k_input)
-    kmeans = kmeans.fit(trained_titanic[[x_column, y_column]])
+    kmeans = kmeans.fit(trained_minnow[[x_column, y_column]])
     centroids = kmeans.cluster_centers_
-    clusters = kmeans.fit_predict(trained_titanic[[x_column, y_column]])
-    print(np.where(kmeans.labels_ == 0))
+    clusters = kmeans.fit_predict(trained_minnow[[x_column, y_column]])
+    end_time = datetime.datetime.now()
     mydict = {i: np.where(kmeans.labels_ == i)[0] for i in range(k_input)}
-    print(mydict)
-    distances = []
-    my_euclidean_range = []
-    for i in range(k_input):
-        if (i+1 >= k_input):
-            distances.append(np.linalg.norm(centroids[0]-centroids[k_input - 1]))
-            my_euclidean_range.append(str(0)+"-"+str(k_input - 1))
-            break
-        my_euclidean_range.append(str(i)+"-"+str(i+1))
-        distances.append(np.linalg.norm(centroids[i]-centroids[i+1]))
-    distance_dict = dict(zip(my_euclidean_range, distances))
-    return render_template('index.html', result=mydict, centroids=centroids, distance_dict=distance_dict)
+    total_time = end_time - start_time
+    return render_template('index.html', result=mydict, time_run=total_time.total_seconds())
 
 @application.route('/myrest', methods=['GET'])
 def myrest():
     sse = []
-    myrange = [5, 20, 100]
-    graph_y = []
+    myrange = range(1, 10, 1)
+    graph_x = []
     x_column = request.args['x_value']
     y_column = request.args['y_value']
     for k in myrange:
         km = KMeans(n_clusters=k)
-        km.fit(trained_titanic[[x_column, y_column]])
-        graph_y.append(k)
+        km.fit(trained_minnow[[x_column, y_column]])
+        graph_x.append(k)
         sse.append(km.inertia_)
-    graph_data = { 'x': sse, 'y': graph_y }
+    graph_data = { 'x': graph_x, 'y': sse }
     return render_template('newindex.html', graph_data=graph_data)
 
 
