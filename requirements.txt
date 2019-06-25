@@ -7,3 +7,4 @@ Werkzeug
 sklearn
 seaborn
 matplotlib
+xlrd
