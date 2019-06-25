@@ -90,35 +90,17 @@
             {% endfor %}
         </table>
         {% endif %} -->
-        <!-- <form class="form-inline" action="/myrest" method="GET">
+        <form class="form-inline" action="/kmeansglobal" method="GET">
             <div class="form-group mb-2">
-                    <select class="form-control form-control-lg" name="x_value">
-                        <option value="pclass">pclass</option>
-                        <option value="survived">survived</option>
-                        <option value="sex">sex</option>
-                        <option value="sibsp">sibsp</option>
-                        <option value="parch">parch</option>
-                        <option value="fare">fare</option>
-                        <option value="embarked">embarked</option>
-                        <option value="body">body</option>
-                        <option value="age">age</option>
-                    </select>
+                    <label for="inputPassword2" class="sr-only">X</label>
+                <input type="text" class="form-control" name="x_co" id="inputPassword2" placeholder="X">
                 </div>
                 <div class="form-group mx-sm-3 mb-2">
-                    <select class="form-control form-control-lg" name="y_value">
-                        <option value="pclass">pclass</option>
-                        <option value="survived">survived</option>
-                        <option value="sex">sex</option>
-                        <option value="sibsp">sibsp</option>
-                        <option value="parch">parch</option>
-                        <option value="fare">fare</option>
-                        <option value="embarked">embarked</option>
-                        <option value="body">body</option>
-                        <option value="age">age</option>
-                    </select>
+                        <label for="inputPassword2" class="sr-only">Y</label>
+                        <input type="text" class="form-control" name="y_co" id="inputPassword2" placeholder="Y">
                 </div>
             <button type="submit" class="btn btn-primary mb-2">Get elbow</button>
-        </form> -->
+        </form>
 
     </center>
 </body>
