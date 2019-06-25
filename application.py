@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
 
 @application.route('/', methods=['GET'])
 def myapp():
-    return 'Hello'
+    return render_template('index.html')
 
 # run the app.
 if __name__ == "__main__":
