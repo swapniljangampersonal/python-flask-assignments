@@ -66,12 +66,12 @@
         <table>
             <th>Centroids</th>
             <th>Points</th>
-            <th>Time in secs</th>
+            <th>Packing Distance(Max)</th>
             {% for key, value in result.items() %}
             <tr>
                 <th> {{ centroids[key][0] }}, {{ centroids[key][1] }} </th>
                 <td> {{ value|length }} </td>
-                <td> {{ time_run }}</td>
+                <td> {{ max_indices[key] }}</td>
             </tr>
             {% endfor %}
         </table>

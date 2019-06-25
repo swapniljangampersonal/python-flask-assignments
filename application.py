@@ -8,6 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 import seaborn as sns
 import matplotlib.pyplot as plt
 import datetime
+from sklearn.metrics.pairwise import euclidean_distances
 
 minnow = "static/minnow.csv"
 trained_minnow = pd.read_csv(minnow)
@@ -36,10 +37,24 @@ def kmeans():
     kmeans = kmeans.fit(trained_minnow[[x_column, y_column]])
     centroids = kmeans.cluster_centers_
     clusters = kmeans.fit_predict(trained_minnow[[x_column, y_column]])
+    distances = []
+    max_dist = []
+    for i, (cx, cy) in enumerate(centroids):
+        mean_distance = k_mean_distance(trained_minnow[[x_column, y_column]], cx, cy, i, clusters)
+        distances.append(mean_distance)
+    for distance_array in distances:
+        max_dist.append(max(distance_array))
+    print(max_dist)
     end_time = datetime.datetime.now()
     mydict = {i: np.where(kmeans.labels_ == i)[0] for i in range(k_input)}
     total_time = end_time - start_time
-    return render_template('index.html', centroids=centroids, result=mydict, time_run=total_time.total_seconds())
+    return render_template('index.html', centroids=centroids, result=mydict, max_indices=max_dist)
+
+def k_mean_distance(data, cx, cy, i_centroid, cluster_labels):
+    distances = []
+    for (x, y) in data[cluster_labels == i_centroid].values:
+        distances.append(np.sqrt((x-cx)**2+(y-cy)**2))
+    return distances
 
 @application.route('/myrest', methods=['GET'])
 def myrest():
