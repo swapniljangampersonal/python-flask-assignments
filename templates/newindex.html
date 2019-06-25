@@ -1,0 +1,23 @@
+
+    <div id="scatterchart"></div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+        if ('{{ graph_data }}' != undefined) {
+            var x = '{{ graph_data|tojson|safe }}';
+            var jsonData = JSON.parse(x);
+            var xValue = jsonData.x;
+    
+            var yValue = jsonData.y;
+            var trace3 = {
+                x: jsonData.y,
+                y: jsonData.x,
+                mode: 'lines+markers',
+                type: 'scatter',
+                text: jsonData.x
+            };
+    
+            var data = [trace3];
+    
+            Plotly.newPlot('scatterchart', data);
+        }
+    </script>

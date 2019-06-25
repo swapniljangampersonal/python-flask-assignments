@@ -35,10 +35,9 @@ def kmeans():
     kmeans = kmeans.fit(trained_titanic[[x_column, y_column]])
     centroids = kmeans.cluster_centers_
     clusters = kmeans.fit_predict(trained_titanic[[x_column, y_column]])
+    print(np.where(kmeans.labels_ == 0))
     mydict = {i: np.where(kmeans.labels_ == i)[0] for i in range(k_input)}
-    sse = []
-    graph_y = []
-    myrange = [5, 20, 100]
+    print(mydict)
     distances = []
     my_euclidean_range = []
     for i in range(k_input):
@@ -48,14 +47,24 @@ def kmeans():
             break
         my_euclidean_range.append(str(i)+"-"+str(i+1))
         distances.append(np.linalg.norm(centroids[i]-centroids[i+1]))
+    distance_dict = dict(zip(my_euclidean_range, distances))
+    return render_template('index.html', result=mydict, centroids=centroids, distance_dict=distance_dict)
+
+@application.route('/myrest', methods=['GET'])
+def myrest():
+    sse = []
+    myrange = [5, 20, 100]
+    graph_y = []
+    x_column = request.args['x_value']
+    y_column = request.args['y_value']
     for k in myrange:
         km = KMeans(n_clusters=k)
         km.fit(trained_titanic[[x_column, y_column]])
         graph_y.append(k)
         sse.append(km.inertia_)
     graph_data = { 'x': sse, 'y': graph_y }
-    distance_dict = dict(zip(my_euclidean_range, distances))
-    return render_template('index.html', result=mydict, centroids=centroids, graph_data=graph_data, distance_dict=distance_dict)
+    return render_template('newindex.html', graph_data=graph_data)
+
 
 # run the app.
 if __name__ == "__main__":

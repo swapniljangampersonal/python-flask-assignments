@@ -90,9 +90,35 @@
             {% endfor %}
         </table>
         {% endif %}
-        {% if graph_data %}
-            <div id="scatterchart"></div>
-        {% endif %}
+        <form class="form-inline" action="/myrest" method="GET">
+            <div class="form-group mb-2">
+                    <select class="form-control form-control-lg" name="x_value">
+                        <option value="pclass">pclass</option>
+                        <option value="survived">survived</option>
+                        <option value="sex">sex</option>
+                        <option value="sibsp">sibsp</option>
+                        <option value="parch">parch</option>
+                        <option value="fare">fare</option>
+                        <option value="embarked">embarked</option>
+                        <option value="body">body</option>
+                        <option value="age">age</option>
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <select class="form-control form-control-lg" name="y_value">
+                        <option value="pclass">pclass</option>
+                        <option value="survived">survived</option>
+                        <option value="sex">sex</option>
+                        <option value="sibsp">sibsp</option>
+                        <option value="parch">parch</option>
+                        <option value="fare">fare</option>
+                        <option value="embarked">embarked</option>
+                        <option value="body">body</option>
+                        <option value="age">age</option>
+                    </select>
+                </div>
+            <button type="submit" class="btn btn-primary mb-2">Get elbow</button>
+        </form>
 
     </center>
 </body>
@@ -105,23 +131,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-<script>
-    var x = '{{ graph_data|tojson|safe }}';
-    var jsonData = JSON.parse(x);
-    var xValue = jsonData.x;
-
-    var yValue = jsonData.y;
-    var trace3 = {
-        x: jsonData.y,
-        y: jsonData.x,
-        mode: 'lines+markers',
-        type: 'scatter',
-        text: jsonData.x
-    };
-
-    var data = [trace3];
-
-    Plotly.newPlot('scatterchart', data);
-</script>
 
 </html>
