@@ -64,12 +64,12 @@
         </form>
         {% if result %}
         <table>
-            <th>Cluster</th>
+            <th>Centroids</th>
             <th>Points</th>
             <th>Time in secs</th>
             {% for key, value in result.items() %}
             <tr>
-                <th> {{ key }} </th>
+                <th> {{ centroids[key][0] }}, {{ centroids[key][1] }} </th>
                 <td> {{ value|length }} </td>
                 <td> {{ time_run }}</td>
             </tr>

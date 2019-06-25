@@ -39,7 +39,7 @@ def kmeans():
     end_time = datetime.datetime.now()
     mydict = {i: np.where(kmeans.labels_ == i)[0] for i in range(k_input)}
     total_time = end_time - start_time
-    return render_template('index.html', result=mydict, time_run=total_time.total_seconds())
+    return render_template('index.html', centroids=centroids, result=mydict, time_run=total_time.total_seconds())
 
 @application.route('/myrest', methods=['GET'])
 def myrest():
